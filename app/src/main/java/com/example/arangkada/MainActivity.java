@@ -22,8 +22,5 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-
-        DatabaseSQL_ARANGKADA dbHelper =
-                new DatabaseSQL_ARANGKADA(this);
     }
 }
