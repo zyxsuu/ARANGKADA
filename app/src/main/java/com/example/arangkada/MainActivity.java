@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
 
         });
-
+        DatabaseHelper dbHelper =
+                new DatabaseHelper(this);
     }
 }
