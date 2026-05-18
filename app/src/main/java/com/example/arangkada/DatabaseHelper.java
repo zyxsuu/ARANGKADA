@@ -1,5 +1,6 @@
 package com.example.arangkada;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -71,5 +72,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MAINTENANCE);
 
         onCreate(db);
+
+    }
+    public boolean insertShift(
+            String date,
+            String startTime,
+            String endTime,
+            double distance,
+            double grossEarnings,
+            double gasExpense,
+            double litersFuel,
+            double netProfit,
+            double fuelEfficiency
+    ) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put("date", date);
+        values.put("start_time", startTime);
+        values.put("end_time", endTime);
+        values.put("distance", distance);
+        values.put("gross_earnings", grossEarnings);
+        values.put("gas_expense", gasExpense);
+        values.put("liters_fuel", litersFuel);
+        values.put("net_profit", netProfit);
+        values.put("fuel_efficiency", fuelEfficiency);
+
+        long result = db.insert(TABLE_SHIFT,
+                null,
+                values);
+
+        return result != -1;
     }
 }
