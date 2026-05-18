@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.arangkada.database.DatabaseHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,7 +41,7 @@ public class ShiftFinancialManager {
     private static final double SPARK_PLUG_INTERVAL_KM      = 4000.0;
     private static final double BRAKE_CHAIN_INTERVAL_KM     = 10000.0;
 
-    private final DatabaseSQL_ARANGKADA dbHelper;
+    private final DatabaseHelper dbHelper;
     private final SimpleDateFormat dateFormatter;
 
     /**
@@ -48,7 +50,7 @@ public class ShiftFinancialManager {
      * @param context  Any context from which a database can be opened.
      */
     public ShiftFinancialManager(Context context) {
-        this.dbHelper = new DatabaseSQL_ARANGKADA(context);
+        this.dbHelper = new DatabaseHelper(context);
         this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     }
 
@@ -130,7 +132,7 @@ public class ShiftFinancialManager {
         values.put("net_profit",      netProfit);
         values.put("fuel_efficiency", fuelEfficiency);
 
-        long newRowId = db.insert(DatabaseSQL_ARANGKADA.TABLE_SHIFT, null, values);
+        long newRowId = db.insert(DatabaseHelper.TABLE_SHIFT, null, values);
         db.close();
 
         return newRowId;
@@ -200,8 +202,8 @@ public class ShiftFinancialManager {
         // ── Read current odometer from the rider_settings table ──
         double currentOdometer = 0.0;
         Cursor cursor = db.rawQuery(
-                "SELECT " + DatabaseSQL_ARANGKADA.TABLE_RIDER + ".odometer " +
-                        "FROM " + DatabaseSQL_ARANGKADA.TABLE_RIDER +
+                "SELECT " + DatabaseHelper.TABLE_RIDER + ".odometer " +
+                        "FROM " + DatabaseHelper.TABLE_RIDER +
                         " LIMIT 1",
                 null
         );
@@ -217,7 +219,7 @@ public class ShiftFinancialManager {
             initialRow.put("motorcycle_model",   "Unknown");
             initialRow.put("odometer",           0.0);
             initialRow.put("savings_percentage", 0.0);
-            db.insert(DatabaseSQL_ARANGKADA.TABLE_RIDER, null, initialRow);
+            db.insert(DatabaseHelper.TABLE_RIDER, null, initialRow);
         }
 
         // ── Compute new odometer ──
@@ -226,7 +228,7 @@ public class ShiftFinancialManager {
         // ── Update the database ──
         ContentValues updatedValues = new ContentValues();
         updatedValues.put("odometer", newOdometer);
-        db.update(DatabaseSQL_ARANGKADA.TABLE_RIDER, updatedValues, null, null);
+        db.update(DatabaseHelper.TABLE_RIDER, updatedValues, null, null);
 
         db.close();
         return newOdometer;
@@ -242,8 +244,8 @@ public class ShiftFinancialManager {
         double odometer = 0.0;
 
         Cursor cursor = db.rawQuery(
-                "SELECT " + DatabaseSQL_ARANGKADA.TABLE_RIDER + ".odometer " +
-                        "FROM " + DatabaseSQL_ARANGKADA.TABLE_RIDER +
+                "SELECT " + DatabaseHelper.TABLE_RIDER + ".odometer " +
+                        "FROM " + DatabaseHelper.TABLE_RIDER +
                         " LIMIT 1",
                 null
         );
@@ -358,7 +360,7 @@ public class ShiftFinancialManager {
         // Look for a log whose mileage is within 10 km of this bracket
         double tolerance = 10.0;
         Cursor cursor = db.rawQuery(
-                "SELECT COUNT(*) FROM " + DatabaseSQL_ARANGKADA.TABLE_MAINTENANCE +
+                "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_MAINTENANCE +
                         " WHERE maintenance_type = ?" +
                         " AND mileage BETWEEN ? AND ?",
                 new String[]{
@@ -395,7 +397,7 @@ public class ShiftFinancialManager {
         values.put("date",             dateFormatter.format(new Date()));
         values.put("notes",            notes);
 
-        db.insert(DatabaseSQL_ARANGKADA.TABLE_MAINTENANCE, null, values);
+        db.insert(DatabaseHelper.TABLE_MAINTENANCE, null, values);
         db.close();
     }
 
