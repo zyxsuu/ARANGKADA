@@ -1,18 +1,17 @@
 package com.example.arangkada.services;
 
-
 import android.Manifest;
-import android.content.pm.PackageManager;
-import androidx.core.app.ActivityCompat;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -23,7 +22,10 @@ import com.google.android.gms.location.LocationServices;
 
 public class TrackingService extends Service {
 
-    private static final String CHANNEL_ID = "ArangkadaTracking";
+    private static final String CHANNEL_ID =
+            "ArangkadaTracking";
+
+    public static double currentDistance = 0.0;
 
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -35,35 +37,72 @@ public class TrackingService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationClient =
+                LocationServices
+                        .getFusedLocationProviderClient(this);
 
         createNotificationChannel();
-        startForeground(1, createNotification("Shift Active", "Tracking distance..."));
 
-        LocationRequest request = LocationRequest.create();
+        startForeground(
+                1,
+                createNotification(
+                        "Shift Active",
+                        "Tracking distance..."
+                )
+        );
+
+        LocationRequest request =
+                LocationRequest.create();
+
         request.setInterval(3000);
         request.setFastestInterval(2000);
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        request.setPriority(
+                LocationRequest.PRIORITY_HIGH_ACCURACY
+        );
 
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) return;
+        locationCallback =
+                new LocationCallback() {
 
-                Location location = locationResult.getLastLocation();
+                    @Override
+                    public void onLocationResult(
+                            LocationResult locationResult
+                    ) {
 
-                if (lastLocation != null) {
-                    float distance = lastLocation.distanceTo(location);
-                    totalDistance += distance;
-                }
+                        if (locationResult == null)
+                            return;
 
-                lastLocation = location;
+                        Location location =
+                                locationResult
+                                        .getLastLocation();
 
-                Intent intent = new Intent("LOCATION_UPDATE");
-                intent.putExtra("distance", totalDistance / 1000);
-                sendBroadcast(intent);
-            }
-        };
+                        if (lastLocation != null) {
+
+                            float distance =
+                                    lastLocation.distanceTo(
+                                            location
+                                    );
+
+                            totalDistance += distance;
+
+                            currentDistance =
+                                    totalDistance / 1000;
+                        }
+
+                        lastLocation = location;
+
+                        Intent intent =
+                                new Intent(
+                                        "LOCATION_UPDATE"
+                                );
+
+                        intent.putExtra(
+                                "distance",
+                                currentDistance
+                        );
+
+                        sendBroadcast(intent);
+                    }
+                };
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -86,14 +125,25 @@ public class TrackingService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(
+            Intent intent,
+            int flags,
+            int startId
+    ) {
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        fusedLocationClient.removeLocationUpdates(locationCallback);
+
+        if (locationCallback != null) {
+
+            fusedLocationClient
+                    .removeLocationUpdates(
+                            locationCallback
+                    );
+        }
     }
 
     @Nullable
@@ -102,22 +152,41 @@ public class TrackingService extends Service {
         return null;
     }
 
-    private Notification createNotification(String title, String text) {
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
+    private Notification createNotification(
+            String title,
+            String text
+    ) {
+
+        return new NotificationCompat.Builder(
+                this,
+                CHANNEL_ID
+        )
                 .setContentTitle(title)
                 .setContentText(text)
-                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
+                .setSmallIcon(
+                        android.R.drawable
+                                .ic_menu_mylocation
+                )
                 .build();
     }
 
     private void createNotificationChannel() {
-        NotificationChannel channel = new NotificationChannel(
-                CHANNEL_ID,
-                "Arangkada Tracking",
-                NotificationManager.IMPORTANCE_LOW
-        );
 
-        NotificationManager manager = getSystemService(NotificationManager.class);
-        manager.createNotificationChannel(channel);
+        NotificationChannel channel =
+                new NotificationChannel(
+                        CHANNEL_ID,
+                        "Arangkada Tracking",
+                        NotificationManager
+                                .IMPORTANCE_LOW
+                );
+
+        NotificationManager manager =
+                getSystemService(
+                        NotificationManager.class
+                );
+
+        manager.createNotificationChannel(
+                channel
+        );
     }
 }
