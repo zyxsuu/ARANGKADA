@@ -3,7 +3,7 @@ package com.example.arangkada;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,13 +15,13 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper db;
 
+    BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //THIS IS FOR THE BACKEND TESTING ONLY(JOSH)
         db = new DatabaseHelper(this);
 
         db.insertShift(
@@ -36,26 +36,34 @@ public class MainActivity extends AppCompatActivity {
                 30.5
         );
 
-
-        //STARTING THE GPS SERVICE
-        Intent intent = new Intent(this, TrackingService.class);
-        startService(intent);
-
-        //STOPPING THE GPS SERVICE
-        Intent intent = new Intent(this, TrackingService.class);
-        stopService(intent);
-
-        //RECEIVING LIVE LOCATION DATA FROM THE SERVICE
-        BroadcastReceiver receiver = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 double distance = intent.getDoubleExtra("distance", 0);
 
-
-                // update UI here
-
-
+                // update UI here (TextView later)
             }
         };
+
+        registerReceiver(
+                receiver,
+                new IntentFilter("LOCATION_UPDATE"),
+                Context.RECEIVER_NOT_EXPORTED
+        );
+
+        // START GPS SERVICE
+        Intent startIntent = new Intent(this, TrackingService.class);
+        startService(startIntent);
+
+        // STOP  THE GPS SERVICE
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+        }
     }
 }

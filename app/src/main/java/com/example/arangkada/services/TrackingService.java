@@ -1,5 +1,9 @@
 package com.example.arangkada.services;
 
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -60,6 +64,19 @@ public class TrackingService extends Service {
                 sendBroadcast(intent);
             }
         };
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+                &&
+                ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
 
         fusedLocationClient.requestLocationUpdates(
                 request,
