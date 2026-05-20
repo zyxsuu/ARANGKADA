@@ -2,18 +2,468 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EFF2F5"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- Top App Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#15215A"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello,"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jaisen!"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvGreeting" />
+
+        <!-- Notification Bell -->
+        <ImageView
+            android:id="@+id/ivNotification"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:src="@android:drawable/ic_popup_reminder"
+            app:tint="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/cvProfilePic"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Circular Profile Pic -->
+        <FrameLayout
+            android:id="@+id/cvProfilePic"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/bg_circle_red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="JL"
+                android:textColor="#000000"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Scrollview for main content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            
+            <!-- CURRENT SHIFT CARD -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_dark_blue"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+                
+                <TextView
+                    android:id="@+id/tvCurrentShiftLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CURRENT SHIFT"
+                    android:textColor="#9E9E9E"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                    
+                <TextView
+                    android:id="@+id/tvOnShift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="On shift"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvCurrentShiftLabel" />
+                    
+                <!-- Time Badge -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_orange"
+                    android:text="3h 42m"
+                    android:textColor="#FFFFFF"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="4dp"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvOnShift"
+                    app:layout_constraintStart_toEndOf="@id/tvOnShift"
+                    app:layout_constraintTop_toTopOf="@id/tvOnShift" />
+                    
+                <!-- Stats Grid inside Dark Card -->
+                <LinearLayout
+                    android:id="@+id/llDarkStats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="24dp"
+                    android:weightSum="4"
+                    app:layout_constraintTop_toBottomOf="@id/tvOnShift">
+                    
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Distance" android:textColor="#FFFFFF" android:textSize="12sp"/>
+                        <TextView android:id="@+id/tvLiveDistance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--.-- km" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                    
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Earnings" android:textColor="#FFFFFF" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱--.--" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                    
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Target" android:textColor="#FFFFFF" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱--.--" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                    
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:gravity="end">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Km/L" android:textColor="#FFFFFF" android:textSize="12sp"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--.--" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="4dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                
+                <!-- Progress Bar -->
+                <TextView
+                    android:id="@+id/tvProgressLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily target progress"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/llDarkStats" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="67%"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvProgressLabel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvProgressLabel" />
+                    
+                <ProgressBar
+                    android:id="@+id/pbDailyTarget"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:progress="67"
+                    android:progressDrawable="@drawable/custom_progress_white"
+                    app:layout_constraintTop_toBottomOf="@id/tvProgressLabel" />
+                    
+                <!-- Buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp"
+                    android:weightSum="2"
+                    app:layout_constraintTop_toBottomOf="@id/pbDailyTarget">
+                    
+                    <Button
+                        android:id="@+id/btnLiveMap"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/bg_button_outline_white"
+                        android:text="Live Map"
+                        android:textColor="#FFFFFF"
+                        android:textAllCaps="false"
+                        app:icon="@android:drawable/ic_dialog_map"
+                        app:iconTint="#FFFFFF"
+                        app:iconGravity="textStart"/>
+                        
+                    <Button
+                        android:id="@+id/btnEndShift"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_button_red"
+                        android:text="End shift"
+                        android:textColor="#FFFFFF"
+                        android:textAllCaps="false" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+            <!-- SECTION: Today's Summary -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Today's Summary"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+                
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                
+                <!-- Top Row of Grid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp"
+                    android:weightSum="2">
+                    
+                    <!-- Net Profit Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+                        
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_my_calendar" app:tint="#223274"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Net profit" android:textColor="#000000" android:textStyle="bold" android:layout_marginTop="8dp"/>
+                        <TextView android:id="@+id/tvNetProfit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱1200" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="After ₱500 gas" android:textColor="#666666" android:textSize="12sp"/>
+                    </LinearLayout>
+                    
+                    <!-- Distance Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+                        
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_directions" app:tint="#223274"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Distance" android:textColor="#000000" android:textStyle="bold" android:layout_marginTop="8dp"/>
+                        <TextView android:id="@+id/tvDistanceValue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="132" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="38.4 km/L avg" android:textColor="#666666" android:textSize="12sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+                
+                <!-- Bottom Row of Grid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="24dp"
+                    android:weightSum="2">
+                    
+                    <!-- Gas Expense Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+                        
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_gallery" app:tint="#223274"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gas Expense" android:textColor="#000000" android:textStyle="bold" android:layout_marginTop="8dp"/>
+                        <TextView android:id="@+id/tvGasExpense" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱500" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1.26 L pumped" android:textColor="#666666" android:textSize="12sp"/>
+                    </LinearLayout>
+                    
+                    <!-- Odometer Card -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+                        
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@android:drawable/ic_menu_recent_history" app:tint="#223274"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Odometer" android:textColor="#000000" android:textStyle="bold" android:layout_marginTop="8dp"/>
+                        <TextView android:id="@+id/tvOdometer" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="14,382 km" android:textColor="#223274" android:textSize="24sp" android:textStyle="bold"/>
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Lifetime total" android:textColor="#666666" android:textSize="12sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- SECTION: Sinking Fun -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sinking fund"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvSinkingGoalPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0% of goal"
+                    android:textColor="#223274"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_gray"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:id="@+id/tvFundName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Goal"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvFundDeduction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0% per shift"
+                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tvFundName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvFundName" />
+
+                <ProgressBar
+                    android:id="@+id/pbSinkingFund"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="12dp"
+                    android:layout_marginTop="12dp"
+                    android:progress="0"
+                    android:progressDrawable="@drawable/custom_progress_blue"
+                    app:layout_constraintTop_toBottomOf="@id/tvFundName" />
+
+                <TextView
+                    android:id="@+id/tvFundSaved"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₱0 saved"
+                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pbSinkingFund" />
+
+                <TextView
+                    android:id="@+id/tvFundGoalAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Goal: ₱--"
+                    android:textColor="#666666"
+                    android:textSize="12sp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pbSinkingFund" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- SECTION: Recent Shifts -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Recent Shifts"
+                    android:textColor="#000000"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+                    
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="See all"
+                    android:textColor="#223274"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            
+            <!-- List of Shifts (Dynamic) -->
+            <LinearLayout
+                android:id="@+id/llRecentShifts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:background="#FFFFFF"
+        app:itemIconTint="#15215A"
+        app:itemTextColor="#15215A"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

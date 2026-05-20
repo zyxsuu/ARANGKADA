@@ -27,7 +27,10 @@ public class SetupActivity extends AppCompatActivity implements SetupNavigator {
         setContentView(R.layout.activity_setup);
 
         if (savedInstanceState == null) {
-            loadFragment(new ProfileSetupFragment(), false);
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new ProfileSetupFragment())
+                .commitAllowingStateLoss();
         }
     }
 
@@ -57,11 +60,12 @@ public class SetupActivity extends AppCompatActivity implements SetupNavigator {
     private void loadFragment(Fragment fragment, boolean addToBackStack) {
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out, android.R.anim.fade_in, android.R.anim.fade_out)
                 .replace(CONTAINER_ID, fragment);
 
         if (addToBackStack) {
             transaction.addToBackStack(null);
         }
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 }

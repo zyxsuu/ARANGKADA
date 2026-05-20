@@ -53,13 +53,15 @@ public class LoginActivity extends AppCompatActivity {
         if (btnLogin != null) {
             btnLogin.setOnClickListener(v -> {
                 if (validateInputs()) {
-                    navigateToMain();
+                    handleLoginFlow();
                 }
             });
         }
 
         if (btnGoogol != null) {
-            btnGoogol.setOnClickListener(v -> navigateToMain());
+            btnGoogol.setOnClickListener(v -> 
+                 Toast.makeText(this, "Google Sign-in SDK coming soon!", Toast.LENGTH_SHORT).show()
+            );
         }
     }
 
@@ -82,8 +84,38 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void navigateToMain() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+    private void handleLoginFlow() {
+        android.content.SharedPreferences prefs = getSharedPreferences("ArangkadaPrefs", android.content.Context.MODE_PRIVATE);
+        
+        // 1. Check Auth Credentials
+        String registeredEmail = prefs.getString("auth_email", "");
+        String registeredPassword = prefs.getString("auth_password", "");
+        
+        String inputEmail = etEmailOrPhone.getText().toString().trim();
+        String inputPassword = etPassword.getText().toString();
+
+        if (registeredEmail.isEmpty()) {
+            Toast.makeText(this, "No account found. Please Register first.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!inputEmail.equals(registeredEmail) || !inputPassword.equals(registeredPassword)) {
+            Toast.makeText(this, "Invalid credentials. Try again.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // 2. Auth Passed! Now check if Setup was completed
+        boolean isSetupComplete = prefs.contains("user_name");
+
+        Intent intent;
+        if (isSetupComplete) {
+            // Already configured, boot to dashboard!
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+        } else {
+            // Logged in but never finished setup
+            intent = new Intent(LoginActivity.this, SetupActivity.class);
+        }
+
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

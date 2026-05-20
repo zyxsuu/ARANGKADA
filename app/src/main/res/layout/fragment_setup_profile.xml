@@ -147,38 +147,47 @@
                             android:inputType="text" />
                     </LinearLayout>
 
-                    <LinearLayout
+                    <FrameLayout
                         android:id="@+id/layout_upload_id"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center"
                         android:background="@drawable/bg_input_field"
-                        android:paddingVertical="16dp"
-                        android:paddingHorizontal="8dp"
                         android:clickable="true"
-                        android:focusable="true">
+                        android:focusable="true"
+                        android:clipToOutline="true">
 
+                        <!-- Full image bleeds to the edge safely behind text if needed -->
                         <ImageView
                             android:id="@+id/iv_id_photo"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/ic_upload"
                             android:contentDescription="Upload ID"
-                            app:tint="#AABBDD"
-                            android:layout_marginBottom="8dp" />
+                            app:tint="#AABBDD" />
 
-                        <TextView
-                            android:id="@+id/tv_upload_label"
-                            android:layout_width="wrap_content"
+                        <!-- Upload label container fixed to bottom -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Tap to upload ID"
-                            android:textColor="#AABBDD"
-                            android:textSize="12sp"
-                            android:gravity="center" />
-                    </LinearLayout>
+                            android:layout_gravity="bottom"
+                            android:gravity="center"
+                            android:paddingVertical="8dp">
+
+                            <TextView
+                                android:id="@+id/tv_upload_label"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Tap to upload ID"
+                                android:textColor="#AABBDD"
+                                android:background="#CC1A2D6B"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="2dp"
+                                android:textSize="12sp"
+                                android:gravity="center" />
+                        </LinearLayout>
+                    </FrameLayout>
                 </LinearLayout>
 
             </LinearLayout>
@@ -342,33 +351,33 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/bg_input_field"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp"
+                        android:orientation="horizontal"
+                        android:background="@drawable/bg_input_field"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
 
-                    <EditText
-                        android:id="@+id/et_area_of_operation"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@null"
-                        android:paddingHorizontal="12dp"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#6B7DB3"
-                        android:hint="Search area..." />
+                        <EditText
+                            android:id="@+id/et_area_of_operation"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@null"
+                            android:paddingHorizontal="12dp"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#6B7DB3"
+                            android:hint="Search area..." />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_search"
-                        android:contentDescription="Search"
-                        android:tint="#AABBDD"
-                        android:layout_marginEnd="12dp" />
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_search"
+                            android:contentDescription="Search"
+                            app:tint="#AABBDD"
+                            android:layout_marginEnd="12dp" />
+                    </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -403,16 +412,19 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <Button
+        <TextView
             android:id="@+id/btn_maybe_later"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Maybe, later"
             android:textColor="#AABBDD"
-            android:background="@null"
-            android:layout_gravity="start"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="24dp" />
+            android:textStyle="bold"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="24dp"
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 </ScrollView>

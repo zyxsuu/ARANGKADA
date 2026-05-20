@@ -144,4 +144,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 SHIFT_ID + " DESC"
         );
     }
+
+    public Cursor getAllMaintenanceLogs() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query(
+                TABLE_MAINTENANCE,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "id DESC"
+        );
+    }
 }

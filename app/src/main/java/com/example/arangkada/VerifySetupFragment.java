@@ -68,6 +68,24 @@ public class VerifySetupFragment extends Fragment {
         // --- 4. Final Confirm ---
         Button btnConfirmDashboard = view.findViewById(R.id.btn_confirm_dashboard);
         btnConfirmDashboard.setOnClickListener(v -> {
+            
+            // At the end of Setup, we successfully copy everything from the SetupPrefs to the main ArangkadaPrefs
+            // so the profile UI acts like it's properly configured and Login pushes right into MainActivity
+            SharedPreferences mainPrefs = requireActivity().getSharedPreferences("ArangkadaPrefs", Context.MODE_PRIVATE);
+            
+            // Get actual auth_name passed from RegisterActivity
+            String registeredName = mainPrefs.getString("auth_name", "Jaisen Josh");
+            
+            mainPrefs.edit()
+                .putString("user_name", registeredName)
+                .putString("user_model", prefs.getString("setup_moto_plate", "Honda Click"))
+                .putString("user_plate", prefs.getString("setup_moto_plate", "ABC 1234"))
+                .putString("user_target", prefs.getString("setup_daily_target", "1,200"))
+                .putString("user_goal", prefs.getString("setup_savings_goal", "PC Set"))
+                .putString("setup_sinking_fund", prefs.getString("setup_sinking_fund", "0%"))
+                .putString("user_phone", prefs.getString("setup_account_details", "09123456789"))
+                .apply();
+
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

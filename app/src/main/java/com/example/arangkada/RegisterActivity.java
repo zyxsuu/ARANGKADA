@@ -78,10 +78,31 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Step 2B: Confirm & Create Account (Proceeds to Onboarding)
         btnConfirmSignUp.setOnClickListener(v -> {
-            // TODO: Persist user credentials (DB/SharedPreferences) here before navigating
-            Intent intent = new Intent(RegisterActivity.this, SetupActivity.class);
-            startActivity(intent);
-            finish();
+            try {
+                // Save core auth credentials so the user can log in later.
+                // Pull directly from the persistent TextView strings on the Verification layout to guarantee no null crashes
+                android.content.SharedPreferences prefs = getSharedPreferences("ArangkadaPrefs", android.content.Context.MODE_PRIVATE);
+                
+                String safeName = tvVerifyName != null ? tvVerifyName.getText().toString().trim() : "";
+                String safeEmail = tvVerifyEmail != null ? tvVerifyEmail.getText().toString().trim() : "";
+                // Use a default stub for password since we didn't mirror it to the verify screen securely
+                String safePassword = etCreatePassword != null && etCreatePassword.getText() != null ? etCreatePassword.getText().toString() : "123456";
+
+                prefs.edit()
+                     .putString("auth_name", safeName)
+                     .putString("auth_email", safeEmail)
+                     .putString("auth_password", safePassword)
+                     // Mark that an account was created, but setup is pending
+                     .putBoolean("account_created", true)
+                     .apply();
+                
+                Intent intent = new Intent(RegisterActivity.this, SetupActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -97,26 +118,39 @@ public class RegisterActivity extends AppCompatActivity {
             etFullName.requestFocus();
             return false;
         }
+        
         if (TextUtils.isEmpty(email)) {
             etEmail.setError("Email is required");
             etEmail.requestFocus();
             return false;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Please enter a valid email address");
+            etEmail.requestFocus();
+            return false;
         }
+        
         if (TextUtils.isEmpty(phone)) {
             etPhoneNumber.setError("Phone number is required");
             etPhoneNumber.requestFocus();
             return false;
         }
+        
         if (TextUtils.isEmpty(createPassword)) {
             etCreatePassword.setError("Password is required");
             etCreatePassword.requestFocus();
             return false;
+        } else if (createPassword.length() < 6) {
+            etCreatePassword.setError("Password must be at least 6 characters long");
+            etCreatePassword.requestFocus();
+            return false;
         }
+        
         if (!createPassword.equals(confirmPassword)) {
             etConfirmPassword.setError("Passwords do not match");
             etConfirmPassword.requestFocus();
             return false;
         }
+        
         return true;
     }
 

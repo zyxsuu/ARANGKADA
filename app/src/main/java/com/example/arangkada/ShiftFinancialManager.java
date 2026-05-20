@@ -49,7 +49,15 @@ public class ShiftFinancialManager {
      *
      * @param context  Any context from which a database can be opened.
      */
+    private final Context mContext;
+
+    /**
+     * Constructor – requires a valid Android Context (Activity or Application).
+     *
+     * @param context  Any context from which a database can be opened.
+     */
     public ShiftFinancialManager(Context context) {
+        this.mContext = context;
         this.dbHelper = new DatabaseHelper(context);
         this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     }
@@ -399,6 +407,35 @@ public class ShiftFinancialManager {
 
         db.insert(DatabaseHelper.TABLE_MAINTENANCE, null, values);
         db.close();
+        
+        // PUSH ANDROID NOTIFICATION
+        try {
+            if (mContext != null) {
+                if (androidx.core.content.ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    android.app.NotificationManager notificationManager = (android.app.NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+                    if (notificationManager != null) {
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            android.app.NotificationChannel channel = new android.app.NotificationChannel("maintenance_alerts", "Maintenance Alerts", android.app.NotificationManager.IMPORTANCE_HIGH);
+                            notificationManager.createNotificationChannel(channel);
+                        }
+                        
+                        android.app.Notification notification = new androidx.core.app.NotificationCompat.Builder(mContext, "maintenance_alerts")
+                                .setSmallIcon(android.R.drawable.ic_dialog_alert)
+                                .setContentTitle("Arangkada Maintenance Alert!")
+                                .setContentText(type + " is safely due at " + mileage + " km")
+                                .setPriority(androidx.core.app.NotificationCompat.PRIORITY_HIGH)
+                                .setAutoCancel(true)
+                                .build();
+                                
+                        // Generate a unique ID so multiple alerts don't overwrite each other
+                        int notificationId = (int) (System.currentTimeMillis() % 10000);
+                        notificationManager.notify(notificationId, notification);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

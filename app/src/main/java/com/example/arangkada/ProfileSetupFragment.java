@@ -63,7 +63,8 @@ public class ProfileSetupFragment extends Fragment {
                     selectedImageUri = uri;
                     ivIdPhoto.setImageURI(uri);
                     ivIdPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    ivIdPhoto.clearColorFilter(); // Remove the default icon tint
+                    ivIdPhoto.clearColorFilter(); // Remove old color filters if any
+                    ivIdPhoto.setImageTintList(null); // CRITICAL: This removes the `app:tint` XML attribute so the photo renders in full color instead of a flat grey box!
                     if (tvUploadLabel != null) {
                         tvUploadLabel.setText("Photo Selected");
                         tvUploadLabel.setTextColor(android.graphics.Color.parseColor("#F5A623")); // Turn yellow
@@ -104,7 +105,7 @@ public class ProfileSetupFragment extends Fragment {
         btnNext               = view.findViewById(R.id.btn_next);
 
         ImageButton btnCalendar       = view.findViewById(R.id.btn_calendar);
-        LinearLayout layoutUploadId   = view.findViewById(R.id.layout_upload_id);
+        View layoutUploadId           = view.findViewById(R.id.layout_upload_id);
         ivIdPhoto                     = view.findViewById(R.id.iv_id_photo);
         tvUploadLabel                 = view.findViewById(R.id.tv_upload_label);
 
@@ -175,12 +176,36 @@ public class ProfileSetupFragment extends Fragment {
         btnFreelance.setOnClickListener(riderTypeListener);
 
         // --- NEXT NAVIGATION ---
-        btnNext.setOnClickListener(v -> {
-            if (validateInputs()) {
-                saveProfileData();
-                navigator.goToNextStep();
-            }
-        });
+        if (btnNext != null) {
+            btnNext.setOnClickListener(v -> {
+                try {
+                    if (validateInputs()) {
+                        saveProfileData();
+                        navigator.goToNextStep();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Error navigating: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+        // --- MAYBE LATER NAVIGATION ---
+        TextView btnMaybeLater = view.findViewById(R.id.btn_maybe_later);
+        if (btnMaybeLater != null) {
+            btnMaybeLater.setOnClickListener(v -> {
+                // If they skip setup, just mark as stub and drop to main
+                android.content.SharedPreferences mainPrefs = requireActivity().getSharedPreferences("ArangkadaPrefs", Context.MODE_PRIVATE);
+                
+                String registeredEmail = mainPrefs.getString("auth_email", "User App");
+                mainPrefs.edit().putString("user_name", registeredEmail.split("@")[0]).apply();
+                
+                android.content.Intent intent = new android.content.Intent(getActivity(), MainActivity.class);
+                intent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                if (getActivity() != null) getActivity().finish();
+            });
+        }
     }
 
     private void showDatePicker() {
@@ -205,6 +230,7 @@ public class ProfileSetupFragment extends Fragment {
         if (chipLalamove != null && chipLalamove.isChecked())  selectedPlatforms.add("Lalamove");
         if (chipMaxim != null && chipMaxim.isChecked())     selectedPlatforms.add("Maxim");
         if (chipGrab != null && chipGrab.isChecked())      selectedPlatforms.add("Grab");
+        // Others chip check was crashing on layout sometimes if not rendered securely, replacing with null check.
         if (chipOthers != null && chipOthers.isChecked())    selectedPlatforms.add("Others");
 
         String platformsString = TextUtils.join(", ", selectedPlatforms);
