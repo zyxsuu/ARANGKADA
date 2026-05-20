@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFF2F5"
+    tools:context=".ReportsActivity">
+
+    <!-- Top Navigation Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="#15215A"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvReportsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reports"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp" />
+
+        <!-- Toggle Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <Button
+                android:id="@+id/btnThisWeek"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_button_outline_white"
+                android:text="This week"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnThisMonth"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_button_outline_white"
+                android:text="This month"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Main Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Top Stats Grid -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Top Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp"
+                    android:weightSum="2">
+
+                    <!-- Total Earnings -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total earnings" android:textColor="#000000" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvTotalEarnings" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱0" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvTotalShifts" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 shifts" android:textColor="#666666" android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <!-- Net Profit -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Net profit" android:textColor="#000000" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvTotalNetProfit" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱0" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="After gas" android:textColor="#666666" android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Bottom Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="24dp"
+                    android:weightSum="2">
+
+                    <!-- Total distance -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total distance" android:textColor="#000000" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvTotalDistance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 km" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0.0 avg/shift" android:textColor="#666666" android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <!-- Gas spent -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:background="@drawable/bg_card_light_blue"
+                        android:padding="16dp"
+                        android:orientation="vertical">
+
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gas spent" android:textColor="#000000" android:textStyle="bold" />
+                        <TextView android:id="@+id/tvTotalGas" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱0" android:textColor="#223274" android:textSize="28sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Total Expense" android:textColor="#666666" android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Bar Chart Card (Daily net income) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_gray"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:id="@+id/tvBarChartTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily net income"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- MPAndroidChart BarChart -->
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvBarChartTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Line Chart Card (Fuel efficiency trend) -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_gray"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:id="@+id/tvLineChartTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Fuel efficiency trend"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- MPAndroidChart LineChart -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/tvLineChartTitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Shift History List Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shift History"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Shift List Items -->
+            <LinearLayout
+                android:id="@+id/llShiftHistoryContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <!-- Dynamic elements will be injected here from item_shift_history.xml -->
+
+            </LinearLayout>
+
+            <!-- Export CSV Button -->
+            <Button
+                android:id="@+id/btnExportCSV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_button_outline_dark"
+                android:text="Export CSV"
+                android:textColor="#15215A"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="24dp"
+                app:icon="@android:drawable/ic_menu_save"
+                app:iconTint="#15215A"
+                app:iconGravity="textStart" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:itemIconTint="#15215A"
+        app:itemTextColor="#15215A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

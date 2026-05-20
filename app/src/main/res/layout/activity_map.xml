@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#D2E3ED"
+    tools:context=".MapActivity">
+
+    <!-- Top Navigation Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#15215A"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvMapTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Live Map"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvGpsStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GPS Tracking Active"
+            android:textColor="#E0E0E0"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvMapTitle" />
+
+        <!-- Location Icon -->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@android:drawable/ic_menu_mylocation"
+            app:tint="#FFFFFF"
+            android:contentDescription="Locate"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Real OSM Maps View -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/mapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintTop_toBottomOf="@id/topBar" />
+
+    <!-- Top Floating Stats Overlay -->
+    <LinearLayout
+        android:id="@+id/llStatsOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_card_dark_transparent"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:weightSum="4"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <!-- Distance -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Distance" android:textColor="#A0A0A0" android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="48.2 km" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" />
+        </LinearLayout>
+
+        <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#444444" android:layout_marginVertical="4dp" />
+
+        <!-- Duration -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Duration" android:textColor="#A0A0A0" android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="3h 42m" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" />
+        </LinearLayout>
+
+        <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#444444" android:layout_marginVertical="4dp" />
+
+        <!-- Earnings -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Earnings" android:textColor="#A0A0A0" android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱680" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" />
+        </LinearLayout>
+
+        <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#444444" android:layout_marginVertical="4dp" />
+
+        <!-- Km/L -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Km/L" android:textColor="#A0A0A0" android:textSize="12sp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="38.4" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Left Map Legend Overlay -->
+    <LinearLayout
+        android:id="@+id/llLegendOverlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@drawable/bg_card_dark_transparent"
+        android:orientation="vertical"
+        android:padding="12dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="4dp">
+            <TextView android:layout_width="45dp" android:layout_height="wrap_content" android:text="Normal" android:textColor="#FFFFFF" android:textSize="10sp" />
+            <View android:layout_width="30dp" android:layout_height="2dp" android:background="#4CAF50" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="4dp">
+            <TextView android:layout_width="45dp" android:layout_height="wrap_content" android:text="Fast" android:textColor="#FFFFFF" android:textSize="10sp" />
+            <View android:layout_width="30dp" android:layout_height="2dp" android:background="#9C27B0" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+            <TextView android:layout_width="45dp" android:layout_height="wrap_content" android:text="Slow" android:textColor="#FFFFFF" android:textSize="10sp" />
+            <View android:layout_width="30dp" android:layout_height="2dp" android:background="#FFC107" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Bottom Right Map Zoom Controls -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Zoom In -->
+        <FrameLayout
+            android:id="@+id/btnZoomIn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_button_zoom"
+            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="+"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Zoom Out -->
+        <FrameLayout
+            android:id="@+id/btnZoomOut"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_button_zoom"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="-"
+                android:textColor="#FFFFFF"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                android:layout_marginTop="-4dp" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:itemIconTint="#15215A"
+        app:itemTextColor="#15215A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

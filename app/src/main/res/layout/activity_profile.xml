@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".ProfileActivity">
+
+    <!-- Top Navigation Bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#15215A"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvProfileTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Main Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Profile Header Block -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
+
+                <!-- Profile Circular Avatar -->
+                <FrameLayout
+                    android:id="@+id/flProfilePic"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_circle_outline_red"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="JL"
+                        android:textColor="#8E1C1C"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <!-- Profile details -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="16dp"
+                    app:layout_constraintStart_toEndOf="@id/flProfilePic"
+                    app:layout_constraintTop_toTopOf="@id/flProfilePic"
+                    app:layout_constraintBottom_toBottomOf="@id/flProfilePic"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/tvFullName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jaisen Josh Laparan"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Full-time rider • Makati City"
+                        android:textColor="#666666"
+                        android:textSize="14sp"
+                        android:layout_marginTop="2dp" />
+
+                    <!-- Badges row -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_outline_pink"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:text="FoodPanda"
+                            android:textColor="#C2185B"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_badge_outline_orange"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:layout_marginStart="8dp"
+                            android:text="Lalamove"
+                            android:textColor="#E65100"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" />
+
+            <!-- SECTION: Motorcycle -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Motorcycle"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Row: Brand & model -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brand &amp; model" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:id="@+id/tvProfileModel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Honda Click 125i" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Row: Plate number -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Plate number" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:id="@+id/tvProfilePlate" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ABC 1234" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <!-- SECTION: Financial settings -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingBottom="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Financial settings"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Row: Daily target -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Daily target" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:id="@+id/tvProfileTarget" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₱1,200" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Row: Savings goal -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Savings goal" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:id="@+id/tvProfileGoal" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PC Set" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <!-- SECTION: Payout Method -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingBottom="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Payout Method"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Row: Primary -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Primary" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="GCash" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Row: Phone Number -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Phone Number" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:id="@+id/tvProfilePhone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="09123456789" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Row: Secondary -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Secondary" android:textColor="#000000" android:textStyle="bold" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Cash" android:textColor="#000000" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" app:layout_constraintTop_toBottomOf="parent" android:layout_marginTop="12dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <!-- Buttons at Bottom -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="48dp"
+                android:paddingBottom="48dp">
+
+                <Button
+                    android:id="@+id/btnEditProfile"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_button_outline_dark"
+                    android:text="Edit profile"
+                    android:textColor="#15215A"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- A customized inline drawable just for the Logout button -->
+                <Button
+                    android:id="@+id/btnLogOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Log out"
+                    android:textColor="#D32F2F"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:backgroundTint="#00000000"
+                    app:strokeColor="#D32F2F"
+                    app:strokeWidth="2dp"
+                    app:cornerRadius="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation Bar -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#D2E3ED"
+        app:itemIconTint="#15215A"
+        app:itemTextColor="#15215A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
