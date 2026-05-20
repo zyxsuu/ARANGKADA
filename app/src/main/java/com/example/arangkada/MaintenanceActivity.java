@@ -98,6 +98,8 @@ public class MaintenanceActivity extends AppCompatActivity {
         double carbInterval = Double.parseDouble(prefs.getString("interval_carb", "4000"));
         double brakeInterval = Double.parseDouble(prefs.getString("interval_brake", "10000"));
         double chainInterval = Double.parseDouble(prefs.getString("interval_chain", "10000"));
+        
+        String activeUserEmail = prefs.getString("auth_email", "unknown_user@arangkada.com");
 
         // Update interval cards using generic text matching method since IDs were not preserved correctly
         updateIntervalCardDynamic("Engine Oil Change", oilInterval, currentOdometer);
@@ -110,7 +112,7 @@ public class MaintenanceActivity extends AppCompatActivity {
         LinearLayout logsContainer = findViewById(R.id.llMaintenanceLogsContainer);
         logsContainer.removeAllViews();
 
-        Cursor cursor = dbHelper.getAllMaintenanceLogs();
+        Cursor cursor = dbHelper.getAllMaintenanceLogs(activeUserEmail);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 String type = cursor.getString(cursor.getColumnIndexOrThrow("maintenance_type"));
@@ -285,8 +287,12 @@ public class MaintenanceActivity extends AppCompatActivity {
             String notes = inputNotes.getText().toString();
             String date = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(new Date());
 
+            android.content.SharedPreferences prefs = getSharedPreferences("ArangkadaPrefs", Context.MODE_PRIVATE);
+            String activeUserEmail = prefs.getString("auth_email", "unknown_user@arangkada.com");
+
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             ContentValues values = new ContentValues();
+            values.put("user_email", activeUserEmail);
             values.put("maintenance_type", selectedService);
             values.put("mileage", currentOdometer);
             values.put("date", date);

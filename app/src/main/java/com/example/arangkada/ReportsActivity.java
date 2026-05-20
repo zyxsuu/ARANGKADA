@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.arangkada.database.DatabaseHelper;
+
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -93,7 +95,10 @@ public class ReportsActivity extends AppCompatActivity {
         ArrayList<BarEntry> netProfitEntries = new ArrayList<>();
         ArrayList<Entry> efficiencyEntries = new ArrayList<>();
 
-        Cursor cursor = dbHelper.getAllShifts();
+        android.content.SharedPreferences prefs = getSharedPreferences("ArangkadaPrefs", android.content.Context.MODE_PRIVATE);
+        String activeUserEmail = prefs.getString("auth_email", "unknown_user@arangkada.com");
+
+        Cursor cursor = dbHelper.getAllShifts(activeUserEmail);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 shiftCount++;
