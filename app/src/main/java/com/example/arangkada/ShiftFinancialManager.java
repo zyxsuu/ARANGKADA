@@ -62,6 +62,16 @@ public class ShiftFinancialManager {
         this.dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     }
 
+    /**
+     * Helper method to grab the dynamically logged in user's email address
+     * to sandbox database transactions natively.
+     */
+    private String getActiveUserEmail() {
+        if (mContext == null) return "unknown_user@arangkada.com";
+        android.content.SharedPreferences prefs = mContext.getSharedPreferences("ArangkadaPrefs", Context.MODE_PRIVATE);
+        return prefs.getString("auth_email", "unknown_user@arangkada.com");
+    }
+
     // ======================================================================
     //  1. POST-SHIFT FINANCIAL LOGIC
     // ======================================================================
@@ -140,6 +150,8 @@ public class ShiftFinancialManager {
         values.put("net_profit",      netProfit);
         values.put("fuel_efficiency", fuelEfficiency);
 
+        values.put("user_email", getActiveUserEmail());
+
         long newRowId = db.insert(DatabaseHelper.TABLE_SHIFT, null, values);
         db.close();
 
@@ -206,37 +218,38 @@ public class ShiftFinancialManager {
      */
     public double updateVirtualOdometer(double shiftDistanceKm) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String activeUser = getActiveUserEmail();
 
         // ── Read current odometer from the rider_settings table ──
         double currentOdometer = 0.0;
         Cursor cursor = db.rawQuery(
-                "SELECT " + DatabaseHelper.TABLE_RIDER + ".odometer " +
-                        "FROM " + DatabaseHelper.TABLE_RIDER +
-                        " LIMIT 1",
-                null
+                "SELECT odometer FROM " + DatabaseHelper.TABLE_RIDER +
+                        " WHERE user_email = ? LIMIT 1",
+                new String[]{activeUser}
         );
 
+        boolean rowExists = false;
         if (cursor != null && cursor.moveToFirst()) {
-            // Column index 0 because we only selected "odometer"
             currentOdometer = cursor.getDouble(0);
+            rowExists = true;
             cursor.close();
-        } else {
-            // No rider settings row exists yet – create one with initial values
-            ContentValues initialRow = new ContentValues();
-            initialRow.put("rider_name",         "Rider");
-            initialRow.put("motorcycle_model",   "Unknown");
-            initialRow.put("odometer",           0.0);
-            initialRow.put("savings_percentage", 0.0);
-            db.insert(DatabaseHelper.TABLE_RIDER, null, initialRow);
         }
 
-        // ── Compute new odometer ──
         double newOdometer = currentOdometer + shiftDistanceKm;
 
-        // ── Update the database ──
-        ContentValues updatedValues = new ContentValues();
-        updatedValues.put("odometer", newOdometer);
-        db.update(DatabaseHelper.TABLE_RIDER, updatedValues, null, null);
+        if (!rowExists) {
+            ContentValues initialRow = new ContentValues();
+            initialRow.put("user_email",         activeUser);
+            initialRow.put("rider_name",         "Rider");
+            initialRow.put("motorcycle_model",   "Unknown");
+            initialRow.put("odometer",           newOdometer);
+            initialRow.put("savings_percentage", 0.0);
+            db.insert(DatabaseHelper.TABLE_RIDER, null, initialRow);
+        } else {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put("odometer", newOdometer);
+            db.update(DatabaseHelper.TABLE_RIDER, updatedValues, "user_email = ?", new String[]{activeUser});
+        }
 
         db.close();
         return newOdometer;
@@ -250,12 +263,12 @@ public class ShiftFinancialManager {
     public double getCurrentOdometer() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         double odometer = 0.0;
+        String activeUser = getActiveUserEmail();
 
         Cursor cursor = db.rawQuery(
-                "SELECT " + DatabaseHelper.TABLE_RIDER + ".odometer " +
-                        "FROM " + DatabaseHelper.TABLE_RIDER +
-                        " LIMIT 1",
-                null
+                "SELECT odometer FROM " + DatabaseHelper.TABLE_RIDER +
+                        " WHERE user_email = ? LIMIT 1",
+                new String[]{activeUser}
         );
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -359,9 +372,9 @@ public class ShiftFinancialManager {
                                          double intervalKm) {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String activeUser = getActiveUserEmail();
 
         // Determine which bracket this odometer belongs to.
-        // E.g. for 1500 km interval, bracket = floor(odometer / 1500) * 1500
         int bracketNumber = (int) Math.floor(currentOdo / intervalKm);
         double bracketFloor = bracketNumber * intervalKm;
 
@@ -369,9 +382,10 @@ public class ShiftFinancialManager {
         double tolerance = 10.0;
         Cursor cursor = db.rawQuery(
                 "SELECT COUNT(*) FROM " + DatabaseHelper.TABLE_MAINTENANCE +
-                        " WHERE maintenance_type = ?" +
+                        " WHERE user_email = ? AND maintenance_type = ?" +
                         " AND mileage BETWEEN ? AND ?",
                 new String[]{
+                        activeUser,
                         maintenanceType,
                         String.valueOf(bracketFloor - tolerance),
                         String.valueOf(bracketFloor + tolerance)
@@ -398,8 +412,11 @@ public class ShiftFinancialManager {
      */
     private void logMaintenanceAlert(String type, double mileage, String notes) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        
+        String activeUser = getActiveUserEmail();
 
         ContentValues values = new ContentValues();
+        values.put("user_email",       activeUser);
         values.put("maintenance_type", type);
         values.put("mileage",          mileage);
         values.put("date",             dateFormatter.format(new Date()));

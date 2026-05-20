@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         bottomNav.setOnItemSelectedListener(navListener);
-        bottomNav.setSelectedItemId(R.id.nav_home);
+        bottomNav.getMenu().findItem(R.id.nav_home).setChecked(true);
     }
 
     @Override
@@ -176,7 +176,10 @@ public class MainActivity extends AppCompatActivity {
         android.widget.LinearLayout recentShiftsContainer = findViewById(R.id.llRecentShifts);
         if (recentShiftsContainer != null) recentShiftsContainer.removeAllViews();
 
-        android.database.Cursor cursor = db.getAllShifts();
+        android.content.SharedPreferences prefs = getSharedPreferences("ArangkadaPrefs", Context.MODE_PRIVATE);
+        String activeUser = prefs.getString("auth_email", "unknown_user@arangkada.com");
+
+        android.database.Cursor cursor = db.getAllShifts(activeUser);
         if (cursor != null && cursor.moveToFirst()) {
             int count = 0;
             do {
@@ -222,7 +225,6 @@ public class MainActivity extends AppCompatActivity {
         }
         
         // Dynamically pull the user's setup name to populate the greeting
-        android.content.SharedPreferences prefs = getSharedPreferences("ArangkadaPrefs", Context.MODE_PRIVATE);
         String name = prefs.getString("user_name", "Rider");
         
         TextView tvUserName = findViewById(R.id.tvUserName);
@@ -261,8 +263,6 @@ public class MainActivity extends AppCompatActivity {
         double deductionPercent = 0.0;
         try { deductionPercent = Double.parseDouble(percentStr.replace("%", "").trim()) / 100.0; } catch (Exception ignored) {}
         
-        // In reality, this goal target value might be set in another screen. For now we will assume the profile text field `user_goal` handles strings like "PC Set" and we can't extract numbers from it natively if they typed words. 
-        // We will mock the target goal amount at 10,000 for demonstration mechanics since the actual design field `user_goal` took text instead of numeric targets.
         double goalAmount = 10000.0; 
         
         // Fund math: calculate total lifetime netprofit mathematically, and apply the percentage slice.
@@ -276,6 +276,38 @@ public class MainActivity extends AppCompatActivity {
         if (tvFundGoalAmount != null) tvFundGoalAmount.setText(String.format(java.util.Locale.US, "Goal: ₱%,.0f", goalAmount));
         if (tvSinkingGoalPercent != null) tvSinkingGoalPercent.setText(pctComplete + "% of goal");
         if (pbSinkingFund != null) pbSinkingFund.setProgress(pctComplete);
+
+        // Daily Target Progress logic
+        String targetStr = prefs.getString("user_target", "800"); 
+        double dailyTarget = 800.0; // Default fallback
+        try {
+            dailyTarget = Double.parseDouble(targetStr.replace("₱", "").replace(",", "").trim());
+        } catch (Exception ignored) {}
+
+        double todayEarnings = totalEarnings - totalGas; // Since we aggregate all shifts for now, treat as today's earnings
+        int targetPct = (int) Math.min(100, Math.max(0, Math.round((todayEarnings / dailyTarget) * 100)));
+
+        // Update the Progress UI text
+        android.view.ViewGroup mainContent = findViewById(android.R.id.content);
+        if (mainContent != null) {
+            android.widget.ProgressBar pbDaily = findViewById(R.id.pbDailyTarget);
+            if (pbDaily != null && pbDaily.getParent() instanceof android.view.ViewGroup) {
+                android.view.ViewGroup parent = (android.view.ViewGroup) pbDaily.getParent();
+                // We know from our `activity_main.xml` layout structure that the text "67%" was defined directly before pbDailyTarget.
+                // It was element index 5. To be secure from arbitrary text replacements, let's target by hardcoded instance index.
+                try {
+                     View targetView = parent.getChildAt(5);
+                     if (targetView instanceof TextView) {
+                         ((TextView) targetView).setText(targetPct + "%");
+                     }
+                } catch (Exception ignored) {}
+            }
+        }
+
+        android.widget.ProgressBar pbDailyTarget = findViewById(R.id.pbDailyTarget);
+        if (pbDailyTarget != null) {
+            pbDailyTarget.setProgress(targetPct);
+        }
     }
     
     private void showEndShiftDialog() {

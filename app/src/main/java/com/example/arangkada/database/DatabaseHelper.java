@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ArangkadaDB";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_RIDER = "rider_settings";
     public static final String TABLE_SHIFT = "shifts";
@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createRiderTable =
                 "CREATE TABLE " + TABLE_RIDER + "(" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "user_email TEXT," +
                         "rider_name TEXT," +
                         "motorcycle_model TEXT," +
                         "odometer REAL," +
@@ -45,6 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createShiftTable =
                 "CREATE TABLE " + TABLE_SHIFT + "(" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "user_email TEXT," +
                         "date TEXT," +
                         "start_time TEXT," +
                         "end_time TEXT," +
@@ -59,6 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String createMaintenanceTable =
                 "CREATE TABLE " + TABLE_MAINTENANCE + "(" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "user_email TEXT," +
                         "maintenance_type TEXT," +
                         "mileage REAL," +
                         "date TEXT," +
@@ -81,6 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean insertShift(
+            String userEmail,
             String date,
             String startTime,
             String endTime,
@@ -95,6 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
+        values.put("user_email", userEmail);
         values.put(SHIFT_DATE, date);
         values.put(SHIFT_START, startTime);
         values.put(SHIFT_END, endTime);
@@ -111,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean saveShiftMinimal(
+            String userEmail,
             String date,
             String startTime,
             String endTime,
@@ -120,6 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
+        values.put("user_email", userEmail);
         values.put(SHIFT_DATE, date);
         values.put(SHIFT_START, startTime);
         values.put(SHIFT_END, endTime);
@@ -130,28 +137,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    public Cursor getAllShifts() {
+    public Cursor getAllShifts(String userEmail) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         return db.query(
                 TABLE_SHIFT,
                 null,
-                null,
-                null,
+                "user_email = ?",
+                new String[]{userEmail},
                 null,
                 null,
                 SHIFT_ID + " DESC"
         );
     }
 
-    public Cursor getAllMaintenanceLogs() {
+    public Cursor getAllMaintenanceLogs(String userEmail) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(
                 TABLE_MAINTENANCE,
                 null,
-                null,
-                null,
+                "user_email = ?",
+                new String[]{userEmail},
                 null,
                 null,
                 "id DESC"
