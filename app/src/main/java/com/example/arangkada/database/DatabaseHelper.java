@@ -153,7 +153,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllMaintenanceLogs(String userEmail) {
-        SQLiteDatabase db = this.getReadableDatabase();
+
+        SQLiteDatabase db =
+                this.getReadableDatabase();
+
         return db.query(
                 TABLE_MAINTENANCE,
                 null,

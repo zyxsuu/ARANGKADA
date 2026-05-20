@@ -30,6 +30,7 @@ import java.util.Locale;
 public class ReportsActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
+    private String userEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,14 @@ public class ReportsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reports);
 
         dbHelper = new DatabaseHelper(this);
+
+        userEmail = getSharedPreferences(
+                "ArangkadaPrefs",
+                MODE_PRIVATE
+        ).getString(
+                "user_email",
+                "sample@gmail.com"
+        );
 
         findViewById(R.id.btnExportCSV).setOnClickListener(v -> 
             Toast.makeText(this, "Exporting CSV... (Mock Download)", Toast.LENGTH_SHORT).show()
@@ -93,7 +102,11 @@ public class ReportsActivity extends AppCompatActivity {
         ArrayList<BarEntry> netProfitEntries = new ArrayList<>();
         ArrayList<Entry> efficiencyEntries = new ArrayList<>();
 
-        Cursor cursor = dbHelper.getAllShifts();
+        Cursor cursor =
+                dbHelper.getAllShifts(
+                        userEmail
+                );
+
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 shiftCount++;
